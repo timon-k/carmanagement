@@ -9,6 +9,12 @@ API.
 
 * Java 17 or higher
 
+# Design Decisions
+
+- We use OpenAPI to define the API in a platform-agnostic way and generate the Spring code for
+  implementing the API. This improves the confidence that API consumer and API endpoint have the
+  same understanding of the offered API.
+
 # Usage
 
 The service supports creation of new cars as shown in the following
