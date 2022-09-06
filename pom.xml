@@ -57,6 +57,7 @@
 				<version>4.3.1</version>
 				<executions>
 					<execution>
+						<id>server</id>
 						<goals>
 							<goal>generate</goal>
 						</goals>
@@ -64,7 +65,7 @@
 							<inputSpec>${project.basedir}/carmanagement.openapi.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<library>spring-boot</library>
-							<modelNameSuffix>Dto</modelNameSuffix>
+							<modelNameSuffix>DTO</modelNameSuffix>
 							<generateApiTests>false</generateApiTests>
 							<generateModelTests>false</generateModelTests>
 							<configOptions>

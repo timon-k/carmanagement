@@ -5,17 +5,12 @@ API.
 
 # Build and Test
 
-## Requirements
-
-* Java 17 or higher
-
-# Design Decisions
-
-- We use OpenAPI to define the API in a platform-agnostic way and generate the Spring code for
-  implementing the API. This improves the confidence that API consumer and API endpoint have the
-  same understanding of the offered API.
+* Install Java 17 or higher
+* Run `./mvnw install`
 
 # Usage
+
+Run the service locally via `.\mvnw spring-boot:run`.
 
 The service supports creation of new cars as shown in the following
 
@@ -68,11 +63,28 @@ bash> curl 127.0.0.1/cars/12345
 “id”: 12345,
 “brand”: “Flexa”,
 “licensePlate”: “L-CS8877E”,
+"manufacturer": "Carcorp",
+"operationCity": "Newtown",
 “status”: “available”,
 “createdAt”: “ "2017-09-01T10:23:47.000Z",
 “lastUpdatedAt”: “ "2022-04-15T13:23:11.000Z"
 }
 ```
+
+# Design Decisions
+
+- We use OpenAPI to define the API in a platform-agnostic way and generate the Spring code for
+  implementing the API. This improves the confidence that API consumer and API endpoint have the
+  same understanding of the offered API.
+  - We do _not_ use Spring Data REST since this makes the backend implementation the ground truth  
+    about what to expect from the service. This is okay if the API which we are writing is private
+    to the service (i.e., because it is only consumed by a front-end service written by the same
+    team). If the service is public and consumed by an unknown set of users, it is better to go
+    API-first and formally define the API as we have done instead of having the API be whatever
+    Spring Data REST gives us.
+- End-to-end integration test with the full service running are not done here, since they are
+  better done in a full deployment setup with the final service container. In the local unit tests,
+  only the levels below the web access layer are tested.
 
 # Further Reading
 

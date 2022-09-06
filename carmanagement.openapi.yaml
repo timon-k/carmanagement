@@ -31,12 +31,12 @@ paths:
             schema:
               $ref: '#/components/schemas/CompleteUserDefinedCarProperties'
       responses:
-        '200':
+        '201':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CarId'
+                $ref: '#/components/schemas/Car'
         '400':
           description: Bad request.
           content:
