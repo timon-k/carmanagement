@@ -1,5 +1,6 @@
 package com.example.carmanagement;
 
+import com.example.carmanagement.gen.model.CarArrayDTO;
 import com.example.carmanagement.gen.model.CarDTO;
 import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDTO;
 import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDTO;
@@ -49,8 +50,8 @@ class CarManagementControllerIntegrationTests {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        var carList = mapper.readValue(result, new TypeReference<List<CarDTO>>() {});
-        assertEquals(List.of(), carList);
+        var carList = mapper.readValue(result, new TypeReference<CarArrayDTO>() {});
+        assertEquals(List.of(), carList.getItems());
     }
 
     @Test
@@ -91,9 +92,9 @@ class CarManagementControllerIntegrationTests {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        var carList = mapper.readValue(result, new TypeReference<List<CarDTO>>() {});
-        assertEquals(1, carList.size());
-        createdCar = carList.get(0);
+        var carList = mapper.readValue(result, new TypeReference<CarArrayDTO>() {});
+        assertEquals(1, carList.getItems().size());
+        createdCar = carList.getItems().get(0);
         assertEquals(carToCreate.getLicensePlate(), createdCar.getLicensePlate());
     }
 
