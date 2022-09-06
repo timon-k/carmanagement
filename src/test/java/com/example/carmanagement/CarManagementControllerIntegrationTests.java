@@ -29,14 +29,15 @@ class CarManagementControllerIntegrationTests {
     @Autowired
     private MockMvc mockMvc;
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper mapper;
 
     private final CompleteUserDefinedCarPropertiesDTO carToCreate =
             (CompleteUserDefinedCarPropertiesDTO) new CompleteUserDefinedCarPropertiesDTO().brand("Flexa")
-                                                                                                                                                   .manufacturer("Carcorp")
-                                                                                                                                                   .licensePlate("L-CS8877E")
-                                                                                                                                                   .operationCity("Newtown")
-                                                                                                                                                   .status(UserDefinedCarPropertiesDTO.StatusEnum.AVAILABLE);
+                                                                                           .manufacturer("Carcorp")
+                                                                                           .licensePlate("L-CS8877E")
+                                                                                           .operationCity("Newtown")
+                                                                                           .status(UserDefinedCarPropertiesDTO.StatusEnum.AVAILABLE);
 
     private CarDTO createdCar = null; // Test relies on order, no Optional here
 
@@ -109,7 +110,8 @@ class CarManagementControllerIntegrationTests {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        assertEquals(createdCar, mapper.readValue(result, new TypeReference<CarDTO>() {}));
+        assertEquals(createdCar.getId(), mapper.readValue(result, new TypeReference<CarDTO>() {})
+                                               .getId());
     }
 
     @Test
@@ -118,7 +120,7 @@ class CarManagementControllerIntegrationTests {
         var update = new UserDefinedCarPropertiesDTO().operationCity("Berlin");
         var updateRequest =
                 put("/cars/" + createdCar.getId()).contentType(MediaType.APPLICATION_JSON)
-                                                              .content(mapper.writeValueAsString(update));
+                                                  .content(mapper.writeValueAsString(update));
         var result = this.mockMvc.perform(updateRequest)
                                  .andExpect(status().isOk())
                                  .andReturn()
