@@ -51,6 +51,14 @@ public class CarManagementController implements CarsApi {
     @Override
     public ResponseEntity<CarDTO> updateCar(Integer id,
                                             UserDefinedCarPropertiesDTO userDefinedCarPropertiesDTO) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return repo.findById(Long.valueOf(id))
+                   .map((existingCar) -> {
+                        dtoMapper.applyNewProperties(existingCar, userDefinedCarPropertiesDTO);
+                        repo.save(existingCar);
+                        return existingCar;
+                   })
+                   .map((car) -> dtoMapper.carToCarDto(car))
+                   .map((dto) -> new ResponseEntity<>(dto, HttpStatus.OK))
+                   .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 }

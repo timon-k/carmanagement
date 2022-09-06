@@ -53,5 +53,5 @@ public class Car {
     private Status status;
 
     private @CreatedDate Instant createdAt;
-    private @LastModifiedDate Instant lastModifiedAt;
+    private @LastModifiedDate Instant lastUpdatedAt;
 }

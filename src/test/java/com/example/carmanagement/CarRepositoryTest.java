@@ -41,7 +41,7 @@ public class CarRepositoryTest {
 
         assertEquals(licensePlate, car.getLicensePlate());
         assertNotNull(car.getCreatedAt());
-        assertNotNull(car.getLastModifiedAt());
+        assertNotNull(car.getLastUpdatedAt());
         assertNotNull(car.getId());
     }
 
@@ -55,7 +55,7 @@ public class CarRepositoryTest {
         Thread.sleep(10);
 
         var newStatus = Car.Status.AVAILABLE;
-        var previousLastModifiedAt = existingCar.getLastModifiedAt();
+        var previousLastUpdatedAt = existingCar.getLastUpdatedAt();
         var previousCreatedAt = existingCar.getCreatedAt();
         existingCar.setStatus(newStatus);
         var updatedCar = repository.save(existingCar);
@@ -64,6 +64,6 @@ public class CarRepositoryTest {
 
         assertEquals(newStatus, updatedCar.getStatus());
         assertEquals(previousCreatedAt, updatedCar.getCreatedAt());
-        assertThat(previousLastModifiedAt).isBefore(updatedCar.getLastModifiedAt());
+        assertThat(previousLastUpdatedAt).isBefore(updatedCar.getLastUpdatedAt());
     }
 }

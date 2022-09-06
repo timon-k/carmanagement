@@ -21,7 +21,7 @@ bash> curl -X POST -H "Content-Type: application/json" -d '\
 “licensePlate”: “L-CS8877E”, \
 "manufacturer": "Carcorp", \
 "operationCity": "Newtown", \
-“status”: “available”, \
+“status”: “available” \
 }' 127.0.0.1/cars
 {
   "id": 12345
@@ -39,7 +39,7 @@ bash> curl -X PUT -H "Content-Type: application/json" -d '\
 “licensePlate”: “L-CS8877E”, \
 "manufacturer": "Carcorp", \
 "operationCity": "Newtown", \
-“status”: “available”, \
+“status”: “available” \
 }' 127.0.0.1/cars/12345
 {
 “id”: 12345,
@@ -73,6 +73,8 @@ bash> curl 127.0.0.1/cars/12345
 
 # Design Decisions
 
+- Using `maven` because I know it. It has lots of flaws, `gradle` is probably the better alternative
+  but I'm not yet familiar wit it (I'm more used to Scala's `sbt`).
 - We use OpenAPI to define the API in a platform-agnostic way and generate the Spring code for
   implementing the API. This improves the confidence that API consumer and API endpoint have the
   same understanding of the offered API.

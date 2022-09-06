@@ -33,10 +33,10 @@ class CarManagementControllerIntegrationTests {
 
     private final CompleteUserDefinedCarPropertiesDTO carToCreate =
             (CompleteUserDefinedCarPropertiesDTO) new CompleteUserDefinedCarPropertiesDTO().brand("Flexa")
-                                                                                           .manufacturer("Carcorp")
-                                                                                           .licensePlate("L-CS8877E")
-                                                                                           .operationCity("Newtown")
-                                                                                           .status(UserDefinedCarPropertiesDTO.StatusEnum.AVAILABLE);
+                                                                                                                                                   .manufacturer("Carcorp")
+                                                                                                                                                   .licensePlate("L-CS8877E")
+                                                                                                                                                   .operationCity("Newtown")
+                                                                                                                                                   .status(UserDefinedCarPropertiesDTO.StatusEnum.AVAILABLE);
 
     private CarDTO createdCar = null; // Test relies on order, no Optional here
 
@@ -64,7 +64,8 @@ class CarManagementControllerIntegrationTests {
     @Test
     @Order(3)
     public void updatingNonExistingCarShouldYield404() throws Exception {
-        this.mockMvc.perform(put("/cars/" + idForWhichNoCarExists))
+        this.mockMvc.perform(put("/cars/" + idForWhichNoCarExists).contentType(MediaType.APPLICATION_JSON)
+                                                                  .content(mapper.writeValueAsString(new UserDefinedCarPropertiesDTO())))
                     .andExpect(status().isNotFound());
     }
 
@@ -108,9 +109,7 @@ class CarManagementControllerIntegrationTests {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        assertEquals(createdCar.createdAt(""),
-                     mapper.readValue(result, new TypeReference<CarDTO>() {})
-                           .createdAt(""));
+        assertEquals(createdCar, mapper.readValue(result, new TypeReference<CarDTO>() {}));
     }
 
     @Test
@@ -118,7 +117,8 @@ class CarManagementControllerIntegrationTests {
     public void updatingExistingCarShouldWork() throws Exception {
         var update = new UserDefinedCarPropertiesDTO().operationCity("Berlin");
         var updateRequest =
-                put("/cars/" + createdCar.getId()).content(mapper.writeValueAsString(update));
+                put("/cars/" + createdCar.getId()).contentType(MediaType.APPLICATION_JSON)
+                                                              .content(mapper.writeValueAsString(update));
         var result = this.mockMvc.perform(updateRequest)
                                  .andExpect(status().isOk())
                                  .andReturn()
