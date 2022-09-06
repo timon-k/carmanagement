@@ -42,6 +42,8 @@ class CarManagementControllerIntegrationTests {
 
     private CarDTO createdCar = null; // Test relies on order, no Optional here
 
+    private final String idForWhichNoCarExists = "43";
+
     @Test
     @Order(1)
     public void shouldHaveNoCarsInitially() throws Exception {
@@ -57,14 +59,14 @@ class CarManagementControllerIntegrationTests {
     @Test
     @Order(1)
     public void queryingNonExistingCarShouldYield404() throws Exception {
-        this.mockMvc.perform(get("/cars/foo"))
+        this.mockMvc.perform(get("/cars/" + idForWhichNoCarExists))
                     .andExpect(status().isNotFound());
     }
 
     @Test
     @Order(1)
     public void updatingNonExistingCarShouldYield404() throws Exception {
-        this.mockMvc.perform(put("/cars/bar"))
+        this.mockMvc.perform(put("/cars/" + idForWhichNoCarExists))
                     .andExpect(status().isNotFound());
     }
 

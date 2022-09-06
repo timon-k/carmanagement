@@ -26,7 +26,10 @@ public class CarManagementController implements CarsApi {
 
     @Override
     public ResponseEntity<CarDTO> getCarById(Integer id) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        return repo.findById(Long.valueOf(id))
+                   .map((car) -> dtoMapper.carToCarDto(car))
+                   .map((dto) -> new ResponseEntity<>(dto, HttpStatus.OK))
+                   .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @Override
