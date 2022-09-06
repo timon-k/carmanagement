@@ -37,12 +37,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Car'
-        '400':
-          description: Bad request.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorMessage'
   /cars/{id}:
     get:
       summary: Retrieve car by ID
@@ -154,6 +148,3 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Car'
-
-    ErrorMessage:
-      type: string

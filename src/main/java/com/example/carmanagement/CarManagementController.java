@@ -34,7 +34,9 @@ public class CarManagementController implements CarsApi {
 
     @Override
     public ResponseEntity<CarDTO> createCar(CompleteUserDefinedCarPropertiesDTO completeUserDefinedCarPropertiesDTO) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        var newCar = dtoMapper.propertiesToNewCar(completeUserDefinedCarPropertiesDTO);
+        repo.save(newCar);
+        return new ResponseEntity<>(dtoMapper.carToCarDto(newCar), HttpStatus.CREATED);
     }
 
     @Override

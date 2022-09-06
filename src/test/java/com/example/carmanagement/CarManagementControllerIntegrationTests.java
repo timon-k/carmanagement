@@ -6,10 +6,7 @@ import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDTO;
 import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDTO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,6 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class CarManagementControllerIntegrationTests {
 
     @Autowired
@@ -57,21 +55,21 @@ class CarManagementControllerIntegrationTests {
     }
 
     @Test
-    @Order(1)
+    @Order(2)
     public void queryingNonExistingCarShouldYield404() throws Exception {
         this.mockMvc.perform(get("/cars/" + idForWhichNoCarExists))
                     .andExpect(status().isNotFound());
     }
 
     @Test
-    @Order(1)
+    @Order(3)
     public void updatingNonExistingCarShouldYield404() throws Exception {
         this.mockMvc.perform(put("/cars/" + idForWhichNoCarExists))
                     .andExpect(status().isNotFound());
     }
 
     @Test
-    @Order(2)
+    @Order(4)
     public void creatingACarShouldWork() throws Exception {
         var postNewCar = post("/cars").contentType(MediaType.APPLICATION_JSON)
                                       .content(mapper.writeValueAsString(carToCreate))
@@ -81,13 +79,13 @@ class CarManagementControllerIntegrationTests {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        var parsedResponse = mapper.readValue(result, new TypeReference<CarDTO>() {});
-        assertNotNull(parsedResponse.getId());
-        assertEquals(carToCreate.getLicensePlate(), parsedResponse.getLicensePlate());
+        createdCar = mapper.readValue(result, new TypeReference<CarDTO>() {});
+        assertNotNull(createdCar.getId());
+        assertEquals(carToCreate.getLicensePlate(), createdCar.getLicensePlate());
     }
 
     @Test
-    @Order(3)
+    @Order(5)
     public void createdCarShouldShowUpInCarList() throws Exception {
         var result = this.mockMvc.perform(get("/cars"))
                                  .andExpect(status().isOk())
@@ -95,27 +93,29 @@ class CarManagementControllerIntegrationTests {
                                  .getResponse()
                                  .getContentAsString();
         var carList = mapper.readValue(result, new TypeReference<CarArrayDTO>() {});
-        assertEquals(1, carList.getItems().size());
-        createdCar = carList.getItems().get(0);
-        assertEquals(carToCreate.getLicensePlate(), createdCar.getLicensePlate());
+        assertEquals(1, carList.getItems()
+                               .size());
+        assertEquals(createdCar.getId(), carList.getItems()
+                                                .get(0)
+                                                .getId());
     }
 
     @Test
-    @Order(3)
+    @Order(6)
     public void queryingExistingCarShouldWork() throws Exception {
-        assertNotNull(createdCar);
         var result = this.mockMvc.perform(get("/cars/" + createdCar.getId()))
                                  .andExpect(status().isOk())
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        assertEquals(createdCar, mapper.readValue(result, new TypeReference<CarDTO>() {}));
+        assertEquals(createdCar.createdAt(""),
+                     mapper.readValue(result, new TypeReference<CarDTO>() {})
+                           .createdAt(""));
     }
 
     @Test
-    @Order(4)
+    @Order(7)
     public void updatingExistingCarShouldWork() throws Exception {
-        assertNotNull(createdCar);
         var update = new UserDefinedCarPropertiesDTO().operationCity("Berlin");
         var updateRequest =
                 put("/cars/" + createdCar.getId()).content(mapper.writeValueAsString(update));
@@ -126,5 +126,6 @@ class CarManagementControllerIntegrationTests {
                                  .getContentAsString();
         var parsedResult = mapper.readValue(result, new TypeReference<CarDTO>() {});
         assertEquals(update.getOperationCity(), parsedResult.getOperationCity());
+        assertNotNull(parsedResult.getLastUpdatedAt());
     }
 }
