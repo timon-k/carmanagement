@@ -17,20 +17,23 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 public class CarRepositoryTest {
 
-    @Autowired CarRepository repository;
-    @Autowired AuditingEntityListener listener;
-    @Autowired EntityManager entityManager;
+    @Autowired
+    CarRepository repository;
+    @Autowired
+    AuditingEntityListener listener;
+    @Autowired
+    EntityManager entityManager;
 
     String licensePlate = "L-CS8877E";
 
     Car createNewCar() {
-        var car = new Car();
-        car.setManufacturer("Carcorp");
-        car.setBrand("Flexa");
-        car.setLicensePlate(licensePlate);
-        car.setOperationCity("Newtown");
-        car.setStatus(Car.Status.IN_MAINTENANCE);
-        return car;
+        return Car.builder()
+                  .manufacturer("Carcorp")
+                  .brand("Flexa")
+                  .licensePlate(licensePlate)
+                  .operationCity("Newtown")
+                  .status(Car.Status.IN_MAINTENANCE)
+                  .build();
     }
 
     @Test

@@ -9,9 +9,9 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface CarMapper {
+public interface CarDtoMapper {
 
-    CarMapper INSTANCE = Mappers.getMapper(CarMapper.class);
+    CarDtoMapper INSTANCE = Mappers.getMapper(CarDtoMapper.class);
 
     CarDTO carToCarDto(Car car);
 

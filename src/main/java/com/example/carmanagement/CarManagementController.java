@@ -5,7 +5,6 @@ import com.example.carmanagement.gen.model.CarArrayDTO;
 import com.example.carmanagement.gen.model.CarDTO;
 import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDTO;
 import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +19,7 @@ public class CarManagementController implements CarsApi {
     @Autowired
     private CarRepository repo;
 
-    private final CarMapper dtoMapper = CarMapper.INSTANCE;
-
-    private final ObjectMapper jsonMapper = new ObjectMapper();
+    private final CarDtoMapper dtoMapper = CarDtoMapper.INSTANCE;
 
     @Override
     public ResponseEntity<CarDTO> getCarById(Integer id) {
