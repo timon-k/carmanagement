@@ -17,14 +17,21 @@ The service supports creation of new cars as shown in the following
 ```bash
 bash> curl -X POST -H "Content-Type: application/json" -d '\
 { \
-“brand”: “Flexa”, \
-“licensePlate”: “L-CS8877E”, \
-"manufacturer": "Carcorp", \
-"operationCity": "Newtown", \
-“status”: “available” \
+  "brand": "Flexa", \
+  "licensePlate": "L-CS8877E", \
+  "manufacturer": "Carcorp", \
+  "operationCity": "Newtown", \
+  "status": "available" \
 }' 127.0.0.1/cars
 {
-  "id": 12345
+  "id": 12345,
+  "brand": "Flexa",
+  "licensePlate": "L-CS8877E",
+  "manufacturer": "Carcorp",
+  "operationCity": "Newtown",
+  "status": "available",
+  "createdAt": "2022-04-15T10:23:47.000Z",
+  "lastUpdatedAt": "2022-04-15T10:23:47.000Z"
 }
 ```
 
@@ -35,21 +42,17 @@ To overwrite properties of existing cars use `PUT` as shown in the following
 ```bash
 bash> curl -X PUT -H "Content-Type: application/json" -d '\
 { \
-“brand”: “Flexa”, \
-“licensePlate”: “L-CS8877E”, \
-"manufacturer": "Carcorp", \
-"operationCity": "Newtown", \
-“status”: “available” \
+  "operationCity": "Someotherplace" \
 }' 127.0.0.1/cars/12345
 {
-“id”: 12345,
-“brand”: “Flexa”,
-“licensePlate”: “L-CS8877E”,
-"manufacturer": "Carcorp",
-"operationCity": "Newtown",
-“status”: “available”,
-“createdAt”: “ "2017-09-01T10:23:47.000Z",
-“lastUpdatedAt”: “ "2022-04-15T13:23:11.000Z"
+  "id": 12345,
+  "brand": "Flexa",
+  "licensePlate": "L-CS8877E",
+  "manufacturer": "Carcorp",
+  "operationCity": "Someotherplace",
+  "status": "available",
+  "createdAt": "2022-04-15T13:23:11.000Z",
+  "lastUpdatedAt": "2022-04-15T13:25:01.000Z"
 }
 ```
 
@@ -60,14 +63,14 @@ The service also supports querying individual cars via `GET` as shown in the fol
 ```bash
 bash> curl 127.0.0.1/cars/12345
 {
-“id”: 12345,
-“brand”: “Flexa”,
-“licensePlate”: “L-CS8877E”,
-"manufacturer": "Carcorp",
-"operationCity": "Newtown",
-“status”: “available”,
-“createdAt”: “ "2017-09-01T10:23:47.000Z",
-“lastUpdatedAt”: “ "2022-04-15T13:23:11.000Z"
+  "id": 12345,
+  "brand": "Flexa",
+  "licensePlate": "L-CS8877E",
+  "manufacturer": "Carcorp",
+  "operationCity": "Newtown",
+  "status": "available",
+  "createdAt": "2022-04-15T13:23:11.000Z",
+  "lastUpdatedAt": "2022-04-15T13:23:11.000Z"
 }
 ```
 
