@@ -1,9 +1,9 @@
 package com.example.carmanagement;
 
-import com.example.carmanagement.gen.model.CarArrayDTO;
-import com.example.carmanagement.gen.model.CarDTO;
-import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDTO;
-import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDTO;
+import com.example.carmanagement.gen.model.CarArrayDto;
+import com.example.carmanagement.gen.model.CarDto;
+import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDto;
+import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDto;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -32,14 +32,14 @@ class CarManagementControllerIntegrationTests {
     @Autowired
     private ObjectMapper mapper;
 
-    private final CompleteUserDefinedCarPropertiesDTO carToCreate =
-            (CompleteUserDefinedCarPropertiesDTO) new CompleteUserDefinedCarPropertiesDTO().brand("Flexa")
+    private final CompleteUserDefinedCarPropertiesDto carToCreate =
+            (CompleteUserDefinedCarPropertiesDto) new CompleteUserDefinedCarPropertiesDto().brand("Flexa")
                                                                                            .manufacturer("Carcorp")
                                                                                            .licensePlate("L-CS8877E")
                                                                                            .operationCity("Newtown")
-                                                                                           .status(UserDefinedCarPropertiesDTO.StatusEnum.AVAILABLE);
+                                                                                           .status(UserDefinedCarPropertiesDto.StatusEnum.AVAILABLE);
 
-    private CarDTO createdCar = null; // Test relies on order, no Optional here
+    private CarDto createdCar = null; // Test relies on order, no Optional here
 
     private final String idForWhichNoCarExists = "43";
 
@@ -51,7 +51,7 @@ class CarManagementControllerIntegrationTests {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        var carList = mapper.readValue(result, new TypeReference<CarArrayDTO>() {});
+        var carList = mapper.readValue(result, new TypeReference<CarArrayDto>() {});
         assertEquals(List.of(), carList.getItems());
     }
 
@@ -66,7 +66,7 @@ class CarManagementControllerIntegrationTests {
     @Order(3)
     public void updatingNonExistingCarShouldYield404() throws Exception {
         this.mockMvc.perform(put("/cars/" + idForWhichNoCarExists).contentType(MediaType.APPLICATION_JSON)
-                                                                  .content(mapper.writeValueAsString(new UserDefinedCarPropertiesDTO())))
+                                                                  .content(mapper.writeValueAsString(new UserDefinedCarPropertiesDto())))
                     .andExpect(status().isNotFound());
     }
 
@@ -81,7 +81,7 @@ class CarManagementControllerIntegrationTests {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        createdCar = mapper.readValue(result, new TypeReference<CarDTO>() {});
+        createdCar = mapper.readValue(result, new TypeReference<CarDto>() {});
         assertNotNull(createdCar.getId());
         assertEquals(carToCreate.getLicensePlate(), createdCar.getLicensePlate());
     }
@@ -94,7 +94,7 @@ class CarManagementControllerIntegrationTests {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        var carList = mapper.readValue(result, new TypeReference<CarArrayDTO>() {});
+        var carList = mapper.readValue(result, new TypeReference<CarArrayDto>() {});
         assertEquals(1, carList.getItems()
                                .size());
         assertEquals(createdCar.getId(), carList.getItems()
@@ -110,14 +110,14 @@ class CarManagementControllerIntegrationTests {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        assertEquals(createdCar.getId(), mapper.readValue(result, new TypeReference<CarDTO>() {})
+        assertEquals(createdCar.getId(), mapper.readValue(result, new TypeReference<CarDto>() {})
                                                .getId());
     }
 
     @Test
     @Order(7)
     public void updatingExistingCarShouldWork() throws Exception {
-        var update = new UserDefinedCarPropertiesDTO().operationCity("Berlin");
+        var update = new UserDefinedCarPropertiesDto().operationCity("Berlin");
         var updateRequest =
                 put("/cars/" + createdCar.getId()).contentType(MediaType.APPLICATION_JSON)
                                                   .content(mapper.writeValueAsString(update));
@@ -126,7 +126,7 @@ class CarManagementControllerIntegrationTests {
                                  .andReturn()
                                  .getResponse()
                                  .getContentAsString();
-        var parsedResult = mapper.readValue(result, new TypeReference<CarDTO>() {});
+        var parsedResult = mapper.readValue(result, new TypeReference<CarDto>() {});
         assertEquals(update.getOperationCity(), parsedResult.getOperationCity());
         assertNotNull(parsedResult.getLastUpdatedAt());
     }

@@ -1,8 +1,8 @@
 package com.example.carmanagement;
 
-import com.example.carmanagement.gen.model.CarDTO;
-import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDTO;
-import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDTO;
+import com.example.carmanagement.gen.model.CarDto;
+import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDto;
+import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,12 +33,12 @@ public class CarJsonMapperTest {
                         }
                         """;
         var mappedResult = mapper.readValue(inputJson,
-                                            new TypeReference<CompleteUserDefinedCarPropertiesDTO>() {});
-        var expectedResult = new CompleteUserDefinedCarPropertiesDTO().brand("Flexa")
+                                            new TypeReference<CompleteUserDefinedCarPropertiesDto>() {});
+        var expectedResult = new CompleteUserDefinedCarPropertiesDto().brand("Flexa")
                                                                       .licensePlate("L-CS8877E")
                                                                       .manufacturer("Carcorp")
                                                                       .operationCity("Newtown")
-                                                                      .status(UserDefinedCarPropertiesDTO.StatusEnum.AVAILABLE);
+                                                                      .status(UserDefinedCarPropertiesDto.StatusEnum.AVAILABLE);
 
         assertEquals(expectedResult, mappedResult);
     }
@@ -57,13 +57,13 @@ public class CarJsonMapperTest {
                                "lastUpdatedAt": "2022-04-15T10:23:47Z"
                            }
                            """;
-        var car = new CarDTO()
+        var car = new CarDto()
                 .id(BigDecimal.valueOf(12345))
                 .brand("Flexa")
                 .licensePlate("L-CS8877E")
                 .manufacturer("Carcorp")
                 .operationCity("Newtown")
-                .status(CarDTO.StatusEnum.AVAILABLE)
+                .status(CarDto.StatusEnum.AVAILABLE)
                 .createdAt(Instant.parse("2022-04-15T10:23:47Z"))
                 .lastUpdatedAt(Instant.parse("2022-04-15T10:23:47Z"));
 

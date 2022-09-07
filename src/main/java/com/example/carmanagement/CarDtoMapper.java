@@ -1,8 +1,8 @@
 package com.example.carmanagement;
 
-import com.example.carmanagement.gen.model.CarDTO;
-import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDTO;
-import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDTO;
+import com.example.carmanagement.gen.model.CarDto;
+import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDto;
+import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -13,10 +13,10 @@ public interface CarDtoMapper {
 
     CarDtoMapper INSTANCE = Mappers.getMapper(CarDtoMapper.class);
 
-    CarDTO carToCarDto(Car car);
+    CarDto carToCarDto(Car car);
 
-    Car propertiesToNewCar(CompleteUserDefinedCarPropertiesDTO carProps);
+    Car propertiesToNewCar(CompleteUserDefinedCarPropertiesDto carProps);
 
     void applyNewProperties(@MappingTarget Car existingCar,
-                            UserDefinedCarPropertiesDTO newProperties);
+                            UserDefinedCarPropertiesDto newProperties);
 }

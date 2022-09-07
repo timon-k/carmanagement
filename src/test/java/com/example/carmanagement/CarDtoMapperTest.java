@@ -1,8 +1,8 @@
 package com.example.carmanagement;
 
-import com.example.carmanagement.gen.model.CarDTO;
-import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDTO;
-import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDTO;
+import com.example.carmanagement.gen.model.CarDto;
+import com.example.carmanagement.gen.model.CompleteUserDefinedCarPropertiesDto;
+import com.example.carmanagement.gen.model.UserDefinedCarPropertiesDto;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -17,11 +17,11 @@ public class CarDtoMapperTest {
     @Test
     public void carPropertiesShouldMapToNewCar() {
         var props =
-                (CompleteUserDefinedCarPropertiesDTO) new CompleteUserDefinedCarPropertiesDTO().brand("Foo")
+                (CompleteUserDefinedCarPropertiesDto) new CompleteUserDefinedCarPropertiesDto().brand("Foo")
                                                                                                .manufacturer("Bar")
                                                                                                .licensePlate("B-TE-123")
                                                                                                .operationCity("Berlin")
-                                                                                               .status(UserDefinedCarPropertiesDTO.StatusEnum.OUT_OF_SERVICE);
+                                                                                               .status(UserDefinedCarPropertiesDto.StatusEnum.OUT_OF_SERVICE);
         var result = mapper.propertiesToNewCar(props);
         assertNull(result.getId());
         assertEquals(props.getBrand(), result.getBrand());
@@ -45,14 +45,14 @@ public class CarDtoMapperTest {
         var car = createCar();
         var result = mapper.carToCarDto(car);
         assertEquals(car.getLicensePlate(), result.getLicensePlate());
-        assertEquals(CarDTO.StatusEnum.AVAILABLE, result.getStatus());
+        assertEquals(CarDto.StatusEnum.AVAILABLE, result.getStatus());
         assertEquals(car.getLastUpdatedAt(), result.getLastUpdatedAt());
     }
 
     @Test
     public void propertiesShouldUpdateForPartialDtos() {
         var car = createCar();
-        var changes = new UserDefinedCarPropertiesDTO().licensePlate("A-B-5");
+        var changes = new UserDefinedCarPropertiesDto().licensePlate("A-B-5");
         mapper.applyNewProperties(car, changes);
         assertEquals(changes.getLicensePlate(), car.getLicensePlate());
     }
