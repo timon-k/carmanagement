@@ -1,0 +1,150 @@
+openapi: 3.0.1
+
+info:
+  title: Car API
+  description: A dummy API
+  version: 1.0.0
+
+servers:
+  - url: 'http://localhost:8080'
+    description: dev
+
+paths:
+  /cars:
+    get:
+      summary: Retrieve all cars
+      operationId: getCars
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarArray'
+    post:
+      summary: Create a new car
+      operationId: createCar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteUserDefinedCarProperties'
+      responses:
+        '201':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+  /cars/{id}:
+    get:
+      summary: Retrieve car by ID
+      operationId: getCarById
+      parameters:
+        - name: id
+          in: path
+          description: Car ID
+          required: true
+          schema:
+            type: integer
+            format: number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        '404':
+          description: Car not found
+    put:
+      summary: Overwrites the properties of the given car
+      operationId: updateCar
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDefinedCarProperties'
+      parameters:
+        - name: id
+          in: path
+          description: Car ID
+          required: true
+          schema:
+            type: integer
+            format: number
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Car'
+        '404':
+          description: Car not found
+
+components:
+  schemas:
+
+    UserDefinedCarProperties:
+      type: object
+      properties:
+        brand:
+          type: string
+        licensePlate:
+          type: string
+        manufacturer:
+          type: string
+        operationCity:
+          type: string
+        status:
+          type: string
+          enum: [ available, in-maintenance, out-of-service ]
+
+    CompleteUserDefinedCarProperties:
+      type: object
+      allOf:
+        - $ref: '#/components/schemas/UserDefinedCarProperties'
+      required:
+        - brand
+        - licensePlate
+        - manufacturer
+        - operationCity
+        - status
+
+    CarId:
+      type: object
+      properties:
+        id:
+          type: number
+      required:
+        - id
+
+    AuditTimestamps:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        lastUpdatedAt:
+          type: string
+          format: date-time
+      required:
+        - createdAt
+        - lastUpdatedAt
+
+    Car:
+      allOf:
+        - $ref: '#/components/schemas/CompleteUserDefinedCarProperties'
+        - $ref: '#/components/schemas/CarId'
+        - $ref: '#/components/schemas/AuditTimestamps'
+
+    CarArray:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Car'
